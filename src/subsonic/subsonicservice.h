@@ -41,7 +41,6 @@
 #include "internet/internetservice.h"
 #include "settings/subsonicsettingspage.h"
 
-class QSortFilterProxyModel;
 class QNetworkReply;
 
 class Application;
@@ -50,6 +49,7 @@ class SubsonicRequest;
 class SubsonicScrobbleRequest;
 class CollectionBackend;
 class CollectionModel;
+class CollectionFilter;
 
 class SubsonicService : public InternetService {
   Q_OBJECT
@@ -77,11 +77,11 @@ class SubsonicService : public InternetService {
 
   CollectionBackend *collection_backend() const { return collection_backend_; }
   CollectionModel *collection_model() const { return collection_model_; }
-  QSortFilterProxyModel *collection_sort_model() const { return collection_sort_model_; }
+  CollectionFilter *collection_filter_model() const { return collection_filter_model_; }
 
   CollectionBackend *songs_collection_backend() override { return collection_backend_; }
   CollectionModel *songs_collection_model() override { return collection_model_; }
-  QSortFilterProxyModel *songs_collection_sort_model() override { return collection_sort_model_; }
+  CollectionFilter *songs_collection_filter_model() override { return collection_filter_model_; }
 
   void CheckConfiguration();
   void Scrobble(const QString &song_id, const bool submission, const QDateTime &time);
@@ -107,7 +107,6 @@ class SubsonicService : public InternetService {
   static const char *kClientName;
   static const char *kApiVersion;
   static const char *kSongsTable;
-  static const char *kSongsFtsTable;
   static const int kMaxRedirects;
 
   Application *app_;
@@ -116,7 +115,7 @@ class SubsonicService : public InternetService {
 
   CollectionBackend *collection_backend_;
   CollectionModel *collection_model_;
-  QSortFilterProxyModel *collection_sort_model_;
+  CollectionFilter *collection_filter_model_;
 
   std::shared_ptr<SubsonicRequest> songs_request_;
   std::shared_ptr<SubsonicScrobbleRequest> scrobble_request_;
